@@ -1,0 +1,48 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.nar
+*.ear
+*.zip
+*.tar.gz
+*.rar
+*.jpg
+*.ucls
+*.csv
+
+# Intellij Idea Files
+*.iml
+.idea/
+test-output/
+target/
+
+# Eclipse Files
+*.project
+*.classpath
+*.settings/
+*.factorypath
+
+# Report Portal
+*.lock
+*.sync
+
+/.name
+/compiler.xml
+/jarRepositories.xml
+/misc.xml
+/vcs.xml
