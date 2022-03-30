@@ -9,9 +9,11 @@ import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import rest_api.model.AccessToken;
 
 import static io.restassured.RestAssured.given;
 import static org.apache.http.HttpStatus.SC_OK;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AuthHelper {
     private static final Logger LOGGER = LogManager.getLogger(AuthHelper.class);
@@ -21,96 +23,77 @@ public class AuthHelper {
 
     public static AccessToken getGuestToken() {
         LOGGER.info("Выполняю запрос токена авторизации гостевой");
-        Map<String, String> formParams = Map.of(
+        Map<String, String> params = Map.of(
                 "scope", "guest:default",
                 "grant_type", "client_credentials");
-        tokensSet = given()
-                .relaxedHTTPSValidation()
+        var response = given()
                 .baseUri(AUTH_BASE_URL)
                 .basePath(TOKEN_RESOURCE)
-                .contentType(ContentType.URLENC)
-                .formParams(formParams)
-                .post()
-                .then().log().ifError().statusCode(SC_OK)
-                .extract().body().as(AccessToken.class);
-        LOGGER.debug("Получен ответ\n" + tokensSet.toString());
-        return tokensSet;
-
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .auth().preemptive().basic("front_2d6b0a8391742f5d789d7d915755e09e", "-")
+                .body(params)
+                .post();
+        assertThat(response.getStatusCode()).isEqualTo(SC_OK);
+        LOGGER.debug("Получен ответ - \n" + response.getBody());
+        return response.as(AccessToken.class);
     }
 
+    public static AccessToken getUserToken(final String login, final String password) {
+        Map<String, String> params = Map.of(
+                "username", login,
+                "password", password,
+                "grant_type", "password");
+        var response = given()
+                .baseUri(AUTH_BASE_URL)
+                .basePath(TOKEN_RESOURCE)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .auth().preemptive().basic("front_2d6b0a8391742f5d789d7d915755e09e", "-")
+                .body(params)
+                .post();
+        assertThat(response.getStatusCode()).isEqualTo(SC_OK);
+        tokensSet = response.as(AccessToken.class);
+        return tokensSet;
+    }
+
+    // todo вопрос о ролевой модели - как определяют юзера
     public static AccessToken getToken(final String login, final String password) {
-        if (tokensSet == null
-                || Instant.now().isAfter(tokensSet.getExpireRefreshTokenTime())
-                || !decode(tokensSet.getAccessToken()).equals(login)) {
+        Map<String, String> params = Map.of();
+        if (tokensSet == null // || !decode(tokensSet.getAccessToken()).equals(login)
+        ) {
             LOGGER.info("Выполняю запрос токена авторизации");
-            Map<String, String> formParams = Map.of(
+            params = Map.of(
                     "username", login,
                     "password", password,
                     "grant_type", "password");
-            tokensSet = given()
-                    .relaxedHTTPSValidation()
-                    .baseUri(AUTH_BASE_URL)
-                    .basePath(TOKEN_RESOURCE)
-                    .contentType(ContentType.URLENC)
-                    .formParams(formParams)
-                    .post()
-                    .then().log().ifError().statusCode(SC_OK)
-                    .extract().body().as(AccessToken.class);
-            LOGGER.debug("Получен ответ\n" + tokensSet.toString());
-            return tokensSet;
 
         } else if (Instant.now().isAfter(tokensSet.getExpireAccessTokenTime())) {
             LOGGER.info("Выполняю запрос обновления токена авторизации");
-            Map<String, String> formParams = Map.of(
+            params = Map.of(
                     "grant_type", "refresh_token",
                     "refresh_token", tokensSet.getRefreshToken());
-            tokensSet = given()
-                    .relaxedHTTPSValidation()
-                    .baseUri(AUTH_BASE_URL)
-                    .basePath(TOKEN_RESOURCE)
-                    .contentType(ContentType.URLENC)
-                    .formParams(formParams)
-                    .post()
-                    .then().log().ifError().statusCode(SC_OK)
-                    .extract().body().as(AccessToken.class);
+        } else {
+            return tokensSet;
         }
+        var response = given()
+                .baseUri(AUTH_BASE_URL)
+                .basePath(TOKEN_RESOURCE)
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .auth().preemptive().basic("front_2d6b0a8391742f5d789d7d915755e09e", "-")
+                .body(params)
+                .post();
+        assertThat(response.getStatusCode()).isEqualTo(SC_OK);
+        tokensSet = response.as(AccessToken.class);
         return tokensSet;
     }
-    /* - guest
-    ------------
-    {     "grant_type":"client_credentials",
-    "scope":"guest:default" }
-    //------------------
-    * "token_type":"Bearer",
-    * "expires_in":3600,
-    * "access_token":"2YotnFZFEjr1zCsicMWpAA",
-    * "refresh_token":"def50200fcc006121b6a068eced57,
-    */
 
-    /* - user
-    //-----------------
-    //{     "grant_type":"password",
-    // "username":"johndoe",
-    // "password":"am9obmRvZTEyMw==" }
-    //------------------
-    "token_type":"Bearer",
-    "expires_in":3600,
-    "access_token":"2YotnFZFEjr1zCsicMWpAA",
-    "refresh_token":"def50200fcc006121b6a068eced57,
-     *
-     */
-
-    /**
-     * Decode JWT.
-     *
-     * @param accessToken accessToken
-     * @return login
-     */
     private static String decode(String accessToken) {
         try {
             return JWT.decode(accessToken)
                     .getClaims()
-                    .get("name")
+                    .get("username")
                     .asString()
                     .toLowerCase()
                     .replaceAll(" ", "_");

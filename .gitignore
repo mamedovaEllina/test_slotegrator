@@ -47,3 +47,8 @@
 /target/surefire-reports/TestSuite.txt
 /target/test-classes/selenium_ui/TestUI.class
 /target/surefire-reports/old/Command line suite/toc.html
+/target/test-classes/rest_api/model/NewPlayer$Builder.class
+/target/test-classes/rest_api/model/AccessToken.class
+/target/test-classes/rest_api/model/NewPlayer.class
+/target/test-classes/rest_api/model/Player$Builder.class
+/target/test-classes/rest_api/model/Player.class

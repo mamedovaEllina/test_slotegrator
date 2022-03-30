@@ -3,6 +3,7 @@ package selenium_ui;
 import com.codeborne.selenide.Configuration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
 import org.testng.annotations.*;
 import rest_api.TestRestAPI;
 
@@ -30,10 +31,10 @@ public class TestUI {
 
     @Test
     public void userCanLoginByUsername() {
-        open("https://habr.com/ru/all/");
-//        $(By.name("user.name")).setValue("johny");
-//        $("#submit").click();
-        $(".loading_progress").should(disappear); // Waits until element disappears
-        $("#username").shouldHave(text("Hello, Johny!")); // Waits until element gets text
+        open("http://test-app.d6.dev.devcaz.com/admin/login");
+        $(By.id("UserLogin_username")).setValue("admin1");
+        $(By.id("UserLogin_password")).setValue("admin1");
+        $(By.cssSelector("[value=\"Sign in\"]")).click();
+        $(".loading_progress").should(disappear);
     }
 }

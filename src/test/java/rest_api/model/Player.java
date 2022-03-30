@@ -1,11 +1,8 @@
-package rest_api;
+package rest_api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.assertj.core.api.SoftAssertions;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
-import static org.assertj.core.api.Assertions.within;
 
 public class Player {
     private final String id;
@@ -30,7 +27,7 @@ public class Player {
                  @JsonProperty("name") String name,
                  @JsonProperty("surname") String surname,
                  @JsonProperty("gender") String gender,
-                 @JsonProperty("private") String phoneNumber,
+                 @JsonProperty("phone_number") String phoneNumber,
                  @JsonProperty("birthdate") final String birthdate,
                  @JsonProperty("bonuses_allowed") final String bonusesAllowed,
                  @JsonProperty("is_verified") String isVerified) {
@@ -212,6 +209,5 @@ public class Player {
         softly.assertThat(this.getEmail()).isEqualTo(expected.getEmail());
         softly.assertAll();
     }
-    
 
 }

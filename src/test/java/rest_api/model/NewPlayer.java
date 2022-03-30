@@ -1,4 +1,4 @@
-package rest_api;
+package rest_api.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,11 +6,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NewPlayer {
     private String username;
-    private String passwordChange;
-    private String passwordRepeat;
     private String email;
     private String name;
     private String surname;
+    @JsonProperty("password_change")
+    private String passwordChange;
+    @JsonProperty("password_repeat")
+    private String passwordRepeat;
+    @JsonProperty("currency_code")
     private String currencyCode;
 
 
@@ -122,6 +125,7 @@ public class NewPlayer {
             this.passwordChange = player.passwordChange;
             this.passwordRepeat = player.passwordRepeat;
             this.email = player.email;
+            this.username = player.username;
             this.name = player.name;
             this.surname = player.surname;
             this.currencyCode = player.currencyCode;
