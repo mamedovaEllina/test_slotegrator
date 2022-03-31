@@ -19,6 +19,7 @@ public class AuthHelper {
     private static final Logger LOGGER = LogManager.getLogger(AuthHelper.class);
     private static final String AUTH_BASE_URL = "http://test-api.d6.dev.devcaz.com/v2/oauth2";
     private static final String TOKEN_RESOURCE = "/token";
+    private static final String BASIC_TOKEN = "front_2d6b0a8391742f5d789d7d915755e09e";
     private static AccessToken tokensSet = null;
 
     public static AccessToken getGuestToken() {
@@ -31,7 +32,7 @@ public class AuthHelper {
                 .basePath(TOKEN_RESOURCE)
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .auth().preemptive().basic("front_2d6b0a8391742f5d789d7d915755e09e", "-")
+                .auth().preemptive().basic(BASIC_TOKEN, "-")
                 .body(params)
                 .post();
         assertThat(response.getStatusCode()).isEqualTo(SC_OK);
@@ -49,7 +50,7 @@ public class AuthHelper {
                 .basePath(TOKEN_RESOURCE)
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .auth().preemptive().basic("front_2d6b0a8391742f5d789d7d915755e09e", "-")
+                .auth().preemptive().basic(BASIC_TOKEN, "-")
                 .body(params)
                 .post();
         assertThat(response.getStatusCode()).isEqualTo(SC_OK);
@@ -81,7 +82,7 @@ public class AuthHelper {
                 .basePath(TOKEN_RESOURCE)
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
-                .auth().preemptive().basic("front_2d6b0a8391742f5d789d7d915755e09e", "-")
+                .auth().preemptive().basic(BASIC_TOKEN, "-")
                 .body(params)
                 .post();
         assertThat(response.getStatusCode()).isEqualTo(SC_OK);

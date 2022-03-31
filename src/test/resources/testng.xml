@@ -7,7 +7,7 @@
     <test name="Base tests" enabled="true">
         <classes>
             <class name="rest_api.TestRestAPI"/>
-            <class name="selenium_ui.TestUI"/>
+            <class name="selenium_ui.TestRunner"/>
         </classes>
     </test>
 </suite>

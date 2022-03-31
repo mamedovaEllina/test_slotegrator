@@ -52,3 +52,11 @@
 /target/test-classes/rest_api/model/NewPlayer.class
 /target/test-classes/rest_api/model/Player$Builder.class
 /target/test-classes/rest_api/model/Player.class
+/target/report/cucumber2.json
+/target/test-classes/rest_api/model/BasePlayer$Builder.class
+/target/test-classes/rest_api/model/BasePlayer.class
+/.idea/libraries/io_cucumber_java8.xml
+/target/test-classes/selenium_ui/steps/StepDefinitions.class
+/target/surefire-reports/junitreports/TEST-selenium_ui.TestRunner.xml
+/target/test-classes/selenium_ui/TestRunner.class
+/target/test-classes/features/base_test.feature
