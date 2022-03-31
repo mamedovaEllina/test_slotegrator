@@ -1,4 +1,4 @@
-# jmeter-test-task
+# automation-test-task
 - [Instruction](#instruction)
 - [Test Plan](#test-plan)
 - [Status](#status)
