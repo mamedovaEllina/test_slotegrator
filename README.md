@@ -8,7 +8,7 @@
 2. Run with mvn clean test
 3. Result in \test_slotegrator\target\surefire-reports
 
-## Test Plan structure
+## Test Plan
 - Positive API tests
     - add player
     - get player
